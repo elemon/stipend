@@ -45,17 +45,18 @@ def execute_read_query(connection, query):
 
 ############## PYTHON AND SQL SECTION ##############
 
-def load_listbox(theID=None, table=None):
+def load_listbox(stipendID=None, table=None):
     query = ""
     mode = 0
     
-    if table and not theID:
+    if table and not stipendID:
 #        query = "SELECT {0}.id,students.name from {0} JOIN students WHERE {0}.student_id == students.id order by name;".format(table)
         query = "SELECT stipends.id,students.name from stipends JOIN students WHERE stipends.student_id = students.id order by name;"
 
-    if table and theID:
+################ Jahi you need a comment to explain how this section work ########## 
+    if table and stipendID:
         mode = 1
-        query = "SELECT * from {0} WHERE id == {1}".format(table, theID)
+        query = "SELECT * from {0} WHERE id == {1}".format(table, stipendID)
 
     if len(query) >= 1:
         records = execute_read_query(connection, query)
@@ -65,10 +66,11 @@ def load_listbox(theID=None, table=None):
             id_vars.set(id_choices)
         elif mode == 1:
             update_form(records)
+#####################################################################################
 
-def post(theID):
+def post(stipendID):
     try:
-        column_values = [theID,updated_at.get(),credit.get(),debit.get(),comment.get("1.0",END),student_id.get()]
+        column_values = [stipendID,updated_at.get(),credit.get(),debit.get(),comment.get("1.0",END),student_id.get()]
         #print(create_query(column_values))
         execute_query(connection,create_query(column_values))
     except Error as e:
@@ -82,11 +84,11 @@ def create_query(val):
     """.format(val[1],val[2],val[3],val[4],val[5],val[0])
 
 def get_id(id_str):
-    theID = ""
+    stipendID = ""
     for char in id_str:
         if char.isnumeric():
-            theID+=char
-    return theID
+            stipendID+=char
+    return stipendID
             
 
 def update_form(record):
@@ -160,11 +162,11 @@ updated_at.grid(column=0, row=15, sticky="we")
 
 ############## SELECT BOX WIDGETS SECTION ##############
 
-theID = Listbox(window, height=19, listvariable=id_vars)
-theID.grid(column=0, row=1, sticky="we")
-theID.bind("<<ListboxSelect>>", lambda e: load_listbox(get_id(theID.get(theID.curselection()[0])), "stipends"))
-'load_listbox(theID.get(theID.curselection()[0]), "stipends")'
+stipendID = Listbox(window, height=19, listvariable=id_vars)
+stipendID.grid(column=0, row=1, sticky="we")
+stipendID.bind("<<ListboxSelect>>", lambda e: load_listbox(get_id(stipendID.get(stipendID.curselection()[0])), "stipends"))
+'load_listbox(stipendID.get(stipendID.curselection()[0]), "stipends")'
 ############## BUTTON WIDGETS SECTION ##############
 
-update_btn = Button(window, text="UPDATE", command=lambda: post(get_id(theID.get(theID.curselection()[0]))))
+update_btn = Button(window, text="UPDATE", command=lambda: post(get_id(stipendID.get(stipendID.curselection()[0]))))
 update_btn.grid(column=0, row=16, sticky="we")
