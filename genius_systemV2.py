@@ -45,28 +45,28 @@ def execute_read_query(connection, query):
 
 ############## PYTHON AND SQL SECTION ##############
 
-def load_listbox(iD=None, table=None):
+def load_listbox(theID=None, table=None):
     query = ""
     mode = 0
     
-    if table and not iD:
+    if table and not theID:
         query = "SELECT {0}.id,students.name from {0} JOIN students WHERE {0}.student_id == students.id order by name;".format(table)
-    if table and iD:
+    if table and theID:
         mode = 1
-        query = "SELECT * from {0} WHERE id == {1}".format(table, iD)
+        query = "SELECT * from {0} WHERE id == {1}".format(table, theID)
 
     if len(query) >= 1:
         records = execute_read_query(connection, query)
         if mode == 0:
             for row in records:
                 id_choices.append("[{0}]: {1}".format(row[0],row[1]))
-            iD_vars.set(id_choices)
+            id_vars.set(id_choices)
         elif mode == 1:
             update_form(records)
 
-def post(iD):
+def post(theID):
     try:
-        column_values = [iD,updated_at.get(),credit.get(),debit.get(),comment.get("1.0",END),student_id.get()]
+        column_values = [theID,updated_at.get(),credit.get(),debit.get(),comment.get("1.0",END),student_id.get()]
         #print(create_query(column_values))
         execute_query(connection,create_query(column_values))
     except Error as e:
@@ -80,11 +80,11 @@ def create_query(val):
     """.format(val[1],val[2],val[3],val[4],val[5],val[0])
 
 def get_id(id_str):
-    iD = ""
+    theID = ""
     for char in id_str:
         if char.isnumeric():
-            iD+=char
-    return iD
+            theID+=char
+    return theID
             
 
 def update_form(record):
@@ -115,12 +115,12 @@ window = ttk.Frame(root, padding="5", width=400, height=250)
 window.grid(column=0, row=0, sticky=(N, W, E, S))
 
 #SQLITE VARIABLES
-connection = create_connection('genius_directory.sqlite3')
+connection = create_connection('genius_directoryV2.sqlite3')
 cursor = connection.cursor() #represents the db connection
 
 #INPUT VARIABLES
 id_choices = []
-iD_vars = StringVar(value=id_choices)
+id_vars = StringVar(value=id_choices)
 
 credit_var = IntVar()
 debit_var = IntVar()
@@ -158,11 +158,11 @@ updated_at.grid(column=0, row=15, sticky="we")
 
 ############## SELECT BOX WIDGETS SECTION ##############
 
-iD = Listbox(window, height=19, listvariable=iD_vars)
-iD.grid(column=0, row=1, sticky="we")
-iD.bind("<<ListboxSelect>>", lambda e: load_listbox(get_id(iD.get(iD.curselection()[0])), "stipends"))
-'load_listbox(iD.get(iD.curselection()[0]), "stipends")'
+theID = Listbox(window, height=19, listvariable=id_vars)
+theID.grid(column=0, row=1, sticky="we")
+theID.bind("<<ListboxSelect>>", lambda e: load_listbox(get_id(theID.get(theID.curselection()[0])), "stipends"))
+'load_listbox(theID.get(theID.curselection()[0]), "stipends")'
 ############## BUTTON WIDGETS SECTION ##############
 
-update_btn = Button(window, text="UPDATE", command=lambda: post(get_id(iD.get(iD.curselection()[0]))))
+update_btn = Button(window, text="UPDATE", command=lambda: post(get_id(theID.get(theID.curselection()[0]))))
 update_btn.grid(column=0, row=16, sticky="we")
