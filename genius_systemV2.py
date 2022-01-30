@@ -93,13 +93,13 @@ def get_id(id_str):
 
 def update_form(record):
     credit.delete(0, END)
-    credit.insert(0, record[0][2])
+    credit.insert(0, record[0][2]) ### Jahi these need explaining  ######
     debit.delete(0, END)
-    debit.insert(0, record[0][3])
+    debit.insert(0, record[0][3])  ### Jahi these need explaining  ######
     comment.delete(1.0, END)
-    comment.insert(1.0, record[0][4])
+    comment.insert(1.0, record[0][4]) ### Jahi these need explaining  ######
     student_id.delete(0, END)
-    student_id.insert(0, record[0][5])
+    student_id.insert(0, record[0][5])  ### Jahi these need explaining  ######
 
     
     updated_at.delete(0, END)
@@ -120,12 +120,15 @@ window.grid(column=0, row=0, sticky=(N, W, E, S))
 
 #SQLITE VARIABLES
 connection = create_connection('genius_directoryV2.sqlite3')
-cursor = connection.cursor() #represents the db connection
+cursor = connection.cursor() ####### represents the db connection #######
 
 #INPUT VARIABLES
 id_choices = []
 id_vars = StringVar(value=id_choices)
 
+
+######### Jahi when instructing 
+######### spend some time explaining these tinker Classes
 credit_var = IntVar()
 debit_var = IntVar()
 student_id_var = IntVar()
@@ -168,5 +171,12 @@ stipendID.bind("<<ListboxSelect>>", lambda e: load_listbox(get_id(stipendID.get(
 'load_listbox(stipendID.get(stipendID.curselection()[0]), "stipends")'
 ############## BUTTON WIDGETS SECTION ##############
 
+##############################################
+# Jahi you can add code to the post Function #
+# that traverses the genius stipend records  #
+# and sums the credit and debit fields and   #
+# then shows the stipend balance.  The field #
+# does not have to in the database           #
+##############################################  
 update_btn = Button(window, text="UPDATE", command=lambda: post(get_id(stipendID.get(stipendID.curselection()[0]))))
 update_btn.grid(column=0, row=16, sticky="we")
