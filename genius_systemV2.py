@@ -27,6 +27,7 @@ def execute_query(connection, query):
         print(f"The error '{e}' occurred")
         return false
 
+########## Jahi why is this here its not called #######
 def execute_drop(table):
     print('dropping')
     if not execute_query(connection,'drop table {0}'.format(table)):
