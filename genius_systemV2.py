@@ -50,7 +50,9 @@ def load_listbox(theID=None, table=None):
     mode = 0
     
     if table and not theID:
-        query = "SELECT {0}.id,students.name from {0} JOIN students WHERE {0}.student_id == students.id order by name;".format(table)
+#        query = "SELECT {0}.id,students.name from {0} JOIN students WHERE {0}.student_id == students.id order by name;".format(table)
+        query = "SELECT stipends.id,students.name from stipends JOIN students WHERE stipends.student_id = students.id order by name;"
+
     if table and theID:
         mode = 1
         query = "SELECT * from {0} WHERE id == {1}".format(table, theID)
